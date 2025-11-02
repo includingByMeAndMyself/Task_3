@@ -1,0 +1,11 @@
+ru\yandex\practicum\stellarburgers\config\Config$Browser.class
+ru\yandex\practicum\stellarburgers\api\UserApi.class
+ru\yandex\practicum\stellarburgers\pageobject\RegisterPage.class
+ru\yandex\practicum\stellarburgers\config\DriverFactory$1.class
+ru\yandex\practicum\stellarburgers\config\DriverFactory.class
+ru\yandex\practicum\stellarburgers\pageobject\RecoverPasswordPage.class
+ru\yandex\practicum\stellarburgers\pageobject\LoginPage.class
+ru\yandex\practicum\stellarburgers\pageobject\PersonalAccountPage.class
+ru\yandex\practicum\stellarburgers\config\Config.class
+ru\yandex\practicum\stellarburgers\pageobject\HomePage.class
+ru\yandex\practicum\stellarburgers\pageobject\BasePage.class
