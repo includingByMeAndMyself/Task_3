@@ -7,7 +7,6 @@ import io.qameta.allure.Step;
 
 public class LoginPage extends BasePage {
     
-    // Локаторы страницы входа
     private final By emailInput = By.xpath("//input[@name='name']");
     private final By passwordInput = By.xpath("//input[@name='Пароль']");
     public static final By loginButton = By.xpath("//button[text()='Войти']");
@@ -53,5 +52,15 @@ public class LoginPage extends BasePage {
         enterEmail(email);
         enterPassword(password);
         clickLoginButton();
+    }
+    
+    @Step("Проверить, что открыта страница входа")
+    public boolean isLoginPageDisplayed() {
+        try {
+            wait.until(ExpectedConditions.presenceOfElementLocated(loginButton));
+            return driver.findElement(loginButton).isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

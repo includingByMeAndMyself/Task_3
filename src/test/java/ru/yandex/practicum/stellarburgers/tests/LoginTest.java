@@ -83,6 +83,14 @@ public class LoginTest extends BaseTest {
         LoginPage loginPage = new LoginPage(driver);
         loginPage.login(email, password);
         
+        // После логина нужно дождаться перехода на главную страницу
+        HomePage homePageAfterLogin = new HomePage(driver);
+        // Проверяем, что мы на главной странице (конструктор активен)
+        assertTrue("После логина должна открыться главная страница", homePageAfterLogin.isBunsSectionActive());
+        
+        // Теперь переходим в личный кабинет
+        homePageAfterLogin.clickPersonalAccountButton();
+        
         PersonalAccountPage personalAccountPage = new PersonalAccountPage(driver);
         assertTrue("Пользователь должен быть авторизован", personalAccountPage.isProfileLinkDisplayed());
     }

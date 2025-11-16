@@ -73,8 +73,6 @@ public class LogoutTest extends BaseTest {
         
         LoginPage loginPageAfterLogout = new LoginPage(driver);
         // Проверяем, что открылась страница входа
-        boolean isLoginPageDisplayed = driver.getCurrentUrl().contains("/login") || 
-                                       driver.findElements(LoginPage.loginButton).size() > 0;
-        assertTrue("После выхода должна открыться страница входа", isLoginPageDisplayed);
+        assertTrue("После выхода должна открыться страница входа", loginPageAfterLogout.isLoginPageDisplayed());
     }
 }

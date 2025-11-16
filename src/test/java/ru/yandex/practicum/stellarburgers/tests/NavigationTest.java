@@ -18,101 +18,123 @@ import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
 public class NavigationTest extends BaseTest {
-    
+
     @Parameterized.Parameters(name = "Браузер: {0}")
     public static Collection<Object[]> browsers() {
-        return Arrays.asList(new Object[][] {
-            {Config.Browser.CHROME},
-            {Config.Browser.YANDEX}
+        return Arrays.asList(new Object[][]{
+                {Config.Browser.CHROME},
+                {Config.Browser.YANDEX}
         });
     }
-    
+
     public NavigationTest(Config.Browser browser) {
         super(browser);
     }
-    
+
     private String email;
     private String password;
     private String name;
     private String accessToken;
-    
+
     @org.junit.Before
     public void createTestUser() {
         email = "test_" + UUID.randomUUID().toString() + "@test.ru";
         password = "password123";
         name = "Test User";
-        
+
         UserApi.createUser(email, password, name);
         accessToken = UserApi.loginUser(email, password);
+        assertNotNull("Access token не должен быть null", accessToken);
     }
-    
+
     @org.junit.After
     public void deleteTestUser() {
         if (accessToken != null) {
             UserApi.deleteUser(accessToken);
         }
     }
-    
+
     @Test
     @DisplayName("Переход в личный кабинет по клику на 'Личный кабинет'")
     public void testNavigateToPersonalAccount() {
         HomePage homePage = new HomePage(driver);
         homePage.open();
+
+        // Переход на страницу логина
         homePage.clickLoginAccountButton();
-        
+
+        // Вход
         LoginPage loginPage = new LoginPage(driver);
         loginPage.login(email, password);
-        
+
+        // Проверка, что мы на главной странице после входа
         HomePage homePageAfterLogin = new HomePage(driver);
+        assertTrue("Пользователь не авторизован: секция булок не активна",
+                homePageAfterLogin.isBunsSectionActive());
+
+        // Теперь безопасно кликать по "Личному кабинету"
         homePageAfterLogin.clickPersonalAccountButton();
-        
+
         PersonalAccountPage personalAccountPage = new PersonalAccountPage(driver);
-        assertTrue("Должна открыться страница личного кабинета", personalAccountPage.isProfileLinkDisplayed());
+        assertTrue("Должна открыться страница личного кабинета",
+                personalAccountPage.isProfileLinkDisplayed());
     }
-    
+
     @Test
     @DisplayName("Переход из личного кабинета в конструктор по клику на 'Конструктор'")
     public void testNavigateFromPersonalAccountToConstructor() {
+        // Вход в систему
         HomePage homePage = new HomePage(driver);
         homePage.open();
         homePage.clickLoginAccountButton();
-        
+
         LoginPage loginPage = new LoginPage(driver);
         loginPage.login(email, password);
-        
+
         HomePage homePageAfterLogin = new HomePage(driver);
+        assertTrue("Пользователь не авторизован",
+                homePageAfterLogin.isBunsSectionActive());
+
         homePageAfterLogin.clickPersonalAccountButton();
-        
+
         PersonalAccountPage personalAccountPage = new PersonalAccountPage(driver);
-        assertTrue("Должна открыться страница личного кабинета", personalAccountPage.isProfileLinkDisplayed());
-        
-        HomePage homePageFromAccount = new HomePage(driver);
-        homePageFromAccount.clickConstructorButton();
-        
+        assertTrue("Страница личного кабинета не загружена",
+                personalAccountPage.isProfileLinkDisplayed());
+
+        // Клик по "Конструктору"
+        personalAccountPage.clickConstructorButton();
+
         HomePage constructorPage = new HomePage(driver);
-        assertTrue("Должна открыться главная страница конструктора", constructorPage.isBunsSectionActive());
+        assertTrue("Должна открыться главная страница конструктора",
+                constructorPage.isBunsSectionActive());
     }
-    
+
     @Test
     @DisplayName("Переход из личного кабинета в конструктор по клику на логотип Stellar Burgers")
     public void testNavigateFromPersonalAccountToConstructorByLogo() {
+        // Вход в систему
         HomePage homePage = new HomePage(driver);
         homePage.open();
         homePage.clickLoginAccountButton();
-        
+
         LoginPage loginPage = new LoginPage(driver);
         loginPage.login(email, password);
-        
+
         HomePage homePageAfterLogin = new HomePage(driver);
+        assertTrue("Пользователь не авторизован",
+                homePageAfterLogin.isBunsSectionActive());
+
         homePageAfterLogin.clickPersonalAccountButton();
-        
+
         PersonalAccountPage personalAccountPage = new PersonalAccountPage(driver);
-        assertTrue("Должна открыться страница личного кабинета", personalAccountPage.isProfileLinkDisplayed());
-        
-        HomePage homePageFromAccount = new HomePage(driver);
-        homePageFromAccount.clickLogoButton();
-        
+        assertTrue("Страница личного кабинета не загружена",
+                personalAccountPage.isProfileLinkDisplayed());
+
+        // Клик по логотипу
+        personalAccountPage.clickLogoButton();
+
         HomePage constructorPage = new HomePage(driver);
-        assertTrue("Должна открыться главная страница конструктора", constructorPage.isBunsSectionActive());
+        assertTrue("Должна открыться главная страница конструктора",
+                constructorPage.isBunsSectionActive());
     }
 }
